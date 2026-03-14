@@ -7,13 +7,13 @@ public class ReservationInput : IValidatableObject
 {
     [Required(ErrorMessage = "Full name is required.")]
     [MaxLength(200)]
-    [RegularExpression(@"^[\p{L}\s\-']+$",
-        ErrorMessage = "Name can only contain letters, spaces, and hyphens.")]
+    [RegularExpression(@"^[a-zA-ZÀ-ÖØ-öø-žČčĆćŠšŽžĐđ]+(\s+[a-zA-ZÀ-ÖØ-öø-žČčĆćŠšŽžĐđ\-']+)+$",
+    ErrorMessage = "Please enter your full name (first and last name).")]
     public string FullName { get; set; } = "";
 
     [Required(ErrorMessage = "Email address is required.")]
-    [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-    [MaxLength(254)]
+    [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]{2,}$",
+    ErrorMessage = "Please enter a valid email address.")]
     public string Email { get; set; } = "";
 
     [Required(ErrorMessage = "Phone number is required.")]
@@ -28,7 +28,7 @@ public class ReservationInput : IValidatableObject
     [Required(ErrorMessage = "Please select a time slot.")]
     public TimeOnly? TimeSlot { get; set; }
 
-    public int PartySize { get; set; } = 2;
+    public int PartySize { get; set; } = 1;
 
     [MaxLength(500, ErrorMessage = "Special requests cannot exceed 500 characters.")]
     public string? SpecialRequests { get; set; }
