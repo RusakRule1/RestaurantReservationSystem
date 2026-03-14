@@ -11,13 +11,17 @@ public class ReservationService : IReservationService
 
     private static readonly TimeOnly[] RegularSlots =
     [
-        new(12, 0), new(12, 30), new(13, 0), new(13, 30),
-        new(18, 0), new(18, 30), new(19, 0), new(19, 30), new(20, 0)
+        new(12, 0), new(12, 30), new(13, 0), new(13, 30), new(14, 0), new(14, 30), new(15, 0), new(15, 30),
+        new(16, 0), new(16, 30), new(17, 0), new(17, 30), new(18, 0), new(18, 30), new(19, 0), new(19, 30),
+        new(20, 0), new(20, 30), new(21, 0)
     ];
 
     private static readonly TimeOnly[] PrivateSlots =
     [
-        new(18, 0), new(20, 0)
+        new(18, 0), new(18, 30),
+        new(19, 0), new(19, 30),
+        new(20, 0), new(20, 30),
+        new(21, 0)
     ];
 
     private const int MaxGuestsPerSlot = 20;
