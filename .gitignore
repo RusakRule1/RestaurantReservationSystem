@@ -1,0 +1,37 @@
+# Build output
+bin/
+obj/
+out/
+
+# .NET
+*.user
+*.suo
+.vs/
+*.csproj.user
+launchSettings.json
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+
+# Secrets / env
+appsettings.*.json
+!appsettings.Development.json
+!appsettings.json
+*.env
+.env
+
+# EF Core migrations backup
+*.dbmdl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+postgres-data/
