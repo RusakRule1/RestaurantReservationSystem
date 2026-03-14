@@ -82,8 +82,7 @@ public class ReservationService : IReservationService
 
     public string GenerateReferenceCode()
     {
-        var timestamp = DateTime.UtcNow.ToString("yyMMdd");
-        var random = Guid.NewGuid().ToString("N")[..6].ToUpper();
-        return $"LM-{timestamp}-{random}";
+        var random = Guid.NewGuid().ToString("N")[..5].ToUpper();
+        return $"LM-{random}";
     }
 }
