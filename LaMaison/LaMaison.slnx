@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yaml" />
+  </Folder>
+  <Project Path="LaMaison.Core/LaMaison.Core.csproj" />
+  <Project Path="LaMaison.Infrastructure/LaMaison.Infrastructure.csproj" />
+  <Project Path="LaMaison.Tests/LaMaison.Tests.csproj" />
+  <Project Path="LaMaison.Web/LaMaison.Web.csproj" />
+</Solution>

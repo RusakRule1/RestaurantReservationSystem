@@ -1,0 +1,154 @@
+/* Typography */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f8f7f4;
+    color: #2c2c2c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.navbar.bg-dark {
+    background-color: #1a1a1a !important;
+}
+
+/* Footer */
+.footer {
+    background-color: #1a1a1a !important;
+    font-size: 0.85rem;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: #1a1a1a;
+    box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.15);
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+/* Buttons */
+.btn-dark {
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
+    letter-spacing: 0.5px;
+}
+
+    .btn-dark:hover {
+        background-color: #333;
+        border-color: #333;
+    }
+
+/* Badges */
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+/* Table */
+.table-hover tbody tr:hover {
+    background-color: #f0ede8;
+    cursor: pointer;
+}
+
+.table th {
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Confirmation page */
+.confirmation-reference {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #1a1a1a;
+}
+
+/* Alert */
+.alert-info {
+    background-color: #e8f4f8;
+    border-color: #b8dce8;
+    color: #1a5276;
+}
+
+/* Slot capacity badges */
+.slot-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    min-width: 70px;
+    font-size: 0.8rem;
+    border: 2px solid transparent;
+}
+
+.slot-time {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.slot-count {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.slot-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.slot-badge--empty {
+    background-color: #f0f0f0;
+    color: #888;
+    border-color: #ddd;
+}
+
+.slot-badge--partial {
+    background-color: #e8f5e9;
+    color: #2d6a4f;
+    border-color: #a8d5b5;
+}
+
+.slot-badge--full {
+    background-color: #fdecea;
+    color: #c0392b;
+    border-color: #f5a0a0;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+
