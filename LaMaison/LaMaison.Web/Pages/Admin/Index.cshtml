@@ -1,6 +1,163 @@
-﻿@page
+﻿@page "/admin"
 @model LaMaison.Web.Pages.Admin.IndexModel
 @{
-    ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Admin — Reservations";
 }
-<h1>Admin</h1>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Reservations</h1>
+        <span class="text-muted small">La Maison Admin</span>
+    </div>
+
+    <form method="get" class="card shadow-sm mb-4" id="filterForm">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">Filter by Date</label>
+                    <input type="date" name="FilterDate" class="form-control"
+                           value="@Model.FilterDate?.ToString("yyyy-MM-dd")"
+                           onchange="this.form.submit()" />
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Filter by Status</label>
+                    <select name="FilterStatus" class="form-select" onchange="this.form.submit()">
+                        <option value="">— All statuses —</option>
+                        @foreach (var status in Enum.GetValues<LaMaison.Core.Enums.ReservationStatus>())
+                        {
+                            <option value="@status" selected="@(Model.FilterStatus == status)">@status</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <a asp-page="Index" class="btn btn-outline-secondary w-100">Clear</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.FilterDate.HasValue)
+    {
+        <div class="alert alert-info mb-4">
+            <strong>@Model.FilterDate.Value.ToString("dddd, MMMM d, yyyy")</strong> —
+            Total expected guests: <strong>@Model.TotalGuests</strong>
+        </div>
+    }
+
+    @if (Model.FilterDate.HasValue && Model.SlotGuestCounts.Any())
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">Slot Capacity Overview</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var slot in LaMaison.Core.Rules.RegularDiningRules.AvailableSlots)
+                    {
+                        var count = Model.SlotGuestCounts.GetValueOrDefault(slot);
+                        var isFull = count >= LaMaison.Core.Rules.RegularDiningRules.MaxGuestsPerSlot;
+                        var percentage = (int)((double)count / LaMaison.Core.Rules.RegularDiningRules.MaxGuestsPerSlot * 100);
+
+                        <div class="slot-badge @(isFull ? "slot-badge--full" : count > 0 ? "slot-badge--partial" : "slot-badge--empty")">
+                            <div class="slot-time">@slot.ToString("HH:mm")</div>
+                            <div class="slot-count">@count / @LaMaison.Core.Rules.RegularDiningRules.MaxGuestsPerSlot</div>
+                            @if (isFull)
+                            {
+                                <div class="slot-label">FULL</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            @if (!Model.Reservations.Any())
+            {
+                <div class="text-center py-5 text-muted">
+                    <p>No reservations found.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Reference</th>
+                                <th>Guest</th>
+                                <th>
+                                    <a asp-page="Index"
+                                       asp-route-FilterDate="@Model.FilterDate?.ToString("yyyy-MM-dd")"
+                                       asp-route-FilterStatus="@Model.FilterStatus"
+                                       asp-route-SortOrder="@(Model.SortOrder == "date_asc" ? "date_desc" : "date_asc")"
+                                       class="text-white text-decoration-none">
+                                        Date @(Model.SortOrder == "date_asc" ? "↑" : "↓")
+                                    </a>
+                                </th>
+                                <th>Time</th>
+                                <th>Party</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model.Reservations)
+                            {
+                                var guestCount = Model.SlotGuestCounts.GetValueOrDefault(r.TimeSlot);
+                                var isFullyBooked = !r.IsPrivateDining && guestCount >= LaMaison.Core.Rules.RegularDiningRules.MaxGuestsPerSlot;
+
+                                <tr class="@(r.Status == LaMaison.Core.Enums.ReservationStatus.Cancelled ? "text-muted" : "")">
+                                    <td>
+                                        <a asp-page="Details" asp-route-id="@r.Id" class="fw-semibold text-decoration-none">
+                                            @r.ReferenceCode
+                                        </a>
+                                    </td>
+                                    <td>@r.FullName</td>
+                                    <td>@r.Date.ToString("dd MMM yyyy")</td>
+                                    <td>
+                                        @r.TimeSlot.ToString("HH:mm")
+                                        @if (isFullyBooked)
+                                        {
+                                            <span class="badge bg-danger ms-1">FULL</span>
+                                        }
+                                    </td>
+                                    <td>@r.PartySize</td>
+                                    <td>
+                                        @if (r.IsPrivateDining)
+                                        {
+                                            <span class="badge bg-purple">Private</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Regular</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge @GetStatusBadgeClass(r.Status)">@r.Status</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(LaMaison.Core.Enums.ReservationStatus status) => status switch
+    {
+        LaMaison.Core.Enums.ReservationStatus.Confirmed => "bg-success",
+        LaMaison.Core.Enums.ReservationStatus.Cancelled => "bg-danger",
+        LaMaison.Core.Enums.ReservationStatus.Completed => "bg-primary",
+        _ => "bg-warning text-dark"
+    };
+}
+
+@section Scripts {
+    <script src="~/js/admin.js"></script>
+}

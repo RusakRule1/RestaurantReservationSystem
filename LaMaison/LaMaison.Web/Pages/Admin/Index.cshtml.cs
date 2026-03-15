@@ -44,14 +44,20 @@ public class IndexModel : PageModel
 
         if (FilterDate.HasValue)
         {
-            TotalGuests = Reservations
-                .Where(r => r.Status != ReservationStatus.Cancelled)
-                .Sum(r => r.PartySize);
+            TotalGuests = await _context.Reservations
+                .Where(r => r.Date == FilterDate.Value
+                         && (r.Status == ReservationStatus.Confirmed ||
+                             r.Status == ReservationStatus.Pending))
+                .SumAsync(r => r.PartySize);
 
-            SlotGuestCounts = Reservations
-                .Where(r => !r.IsPrivateDining && r.Status != ReservationStatus.Cancelled)
+            SlotGuestCounts = await _context.Reservations
+                .Where(r => r.Date == FilterDate.Value
+                         && !r.IsPrivateDining
+                         && (r.Status == ReservationStatus.Confirmed ||
+                             r.Status == ReservationStatus.Pending))
                 .GroupBy(r => r.TimeSlot)
-                .ToDictionary(g => g.Key, g => g.Sum(r => r.PartySize));
+                .Select(g => new { Slot = g.Key, Count = g.Sum(r => r.PartySize) })
+                .ToDictionaryAsync(g => g.Slot, g => g.Count);
         }
     }
 }
